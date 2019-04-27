@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/rabbit
+    http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+    
+    
+    <rabbit:connection-factory id="connectionFactory"
+    	host="${rabbit.host}"
+    	port="${rabbit.port}"
+    	username="${rabbit.username}"
+    	password="${rabbit.password}"
+    	virtual-host="${rabbit.virtual.host}"
+    	publisher-confirms="true"
+    	cache-mode="CONNECTION"
+    	connection-cache-size="3"
+    	channel-cache-size="5"
+    	/>
+    
+    <!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成 -->
+    <rabbit:admin connection-factory="connectionFactory" />
+    
+    <!-- 设置queue -->
+    <rabbit:queue name="SYPJ_QUEUE" auto-delete="false" durable="true"/>
+    
+    <!-- 绑定交换机 -->
+    <rabbit:direct-exchange name="SYPJ_EXCHANGE" auto-delete="false" durable="true">
+		<rabbit:bindings>
+			<rabbit:binding queue="SYPJ_QUEUE" key="SYPJ_BINFKRY" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+    
+    <!-- 配置consumer, 监听的类和queue的对应关系  -->
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="manual">
+    	<rabbit:listener queues="SYPJ_QUEUE" ref="receiveMessage"/>
+    </rabbit:listener-container>
+    
+    
+</beans>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.huateng.dao.DeptDao">
+	
+<resultMap id="deptResultMap" type="com.huateng.entity.Dept">
+  <id property="deptno" column="deptno" />
+  <result property="dname" column="dname"/>
+  <result property="dbSource" column="db_source"/>
+</resultMap>
+
+  <select id="selectDeptList" resultMap="deptResultMap">
+   	 select * from dept
+  </select>
+  
+</mapper>
