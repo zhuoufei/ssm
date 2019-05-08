@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="GBK"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/rabbit
     http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
-    
     
     <rabbit:connection-factory id="connectionFactory"
     	host="${rabbit.host}"
@@ -15,24 +14,23 @@
     	virtual-host="${rabbit.virtual.host}"
     	publisher-confirms="true"
     	cache-mode="CONNECTION"
-    	connection-cache-size="3"
-    	channel-cache-size="5"
+    	
     	/>
     
-    <!--é€šè¿‡æŒ‡å®šä¸‹é¢çš„adminä¿¡æ¯ï¼Œå½“å‰producerä¸­çš„exchangeå’Œqueueä¼šåœ¨rabbitmqæœåŠ¡å™¨ä¸Šè‡ªåŠ¨ç”Ÿæˆ -->
+    <!--Í¨¹ýÖ¸¶¨ÏÂÃæµÄadminÐÅÏ¢£¬µ±Ç°producerÖÐµÄexchangeºÍqueue»áÔÚrabbitmq·þÎñÆ÷ÉÏ×Ô¶¯Éú³É -->
     <rabbit:admin connection-factory="connectionFactory" />
     
-    <!-- è®¾ç½®queue -->
-    <rabbit:queue name="SYPJ_QUEUE" auto-delete="false" durable="true"/>
+    <!-- ÉèÖÃqueue -->
+    <rabbit:queue name="SYPJ_QUEUE" auto-delete="false" durable="true" />
     
-    <!-- ç»‘å®šäº¤æ¢æœº -->
-    <rabbit:direct-exchange name="SYPJ_EXCHANGE" auto-delete="false" durable="true">
+    <!-- °ó¶¨½»»»»ú -->
+    <rabbit:direct-exchange name="SYPJ_EXCHANGE" auto-delete="false" durable="true" >
 		<rabbit:bindings>
 			<rabbit:binding queue="SYPJ_QUEUE" key="SYPJ_BINFKRY" />
 		</rabbit:bindings>
 	</rabbit:direct-exchange>
-    
-    <!-- é…ç½®consumer, ç›‘å¬çš„ç±»å’Œqueueçš„å¯¹åº”å…³ç³»  -->
+	
+    <!-- ÅäÖÃconsumer, ¼àÌýµÄÀàºÍqueueµÄ¶ÔÓ¦¹ØÏµ  -->
     <rabbit:listener-container connection-factory="connectionFactory" acknowledge="manual">
     	<rabbit:listener queues="SYPJ_QUEUE" ref="receiveMessage"/>
     </rabbit:listener-container>
